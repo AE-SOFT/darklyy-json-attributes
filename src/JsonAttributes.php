@@ -123,7 +123,12 @@ class JsonAttributes implements ArrayAccess, Arrayable, Countable, IteratorAggre
         }
 
         foreach ($JsonAttributes as $name => $value) {
-            $builder->where("{$this->sourceAttributeName}->{$name}", $operator ?? '=', $value);
+            if(is_array($value)){
+                $builder->whereIn("{$this->sourceAttributeName}->{$name}", $value);
+            } else {
+                $builder->where("{$this->sourceAttributeName}->{$name}", $operator ?? '=', $value);
+            }
+            
         }
 
         return $builder;
